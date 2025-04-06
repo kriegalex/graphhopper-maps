@@ -13,8 +13,8 @@ export function createMap(): Map {
             enableRotation: false,
             multiWorld: false,
             constrainResolution: true,
-            center: fromLonLat([10, 10]),
-            zoom: 2,
+            center: fromLonLat([8.2275, 46.8182]), // Switzerland
+            zoom: 8,
         }),
         controls: defaultControls({
             zoom: true,

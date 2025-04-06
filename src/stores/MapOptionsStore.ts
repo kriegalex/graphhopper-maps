@@ -180,19 +180,52 @@ const wanderreitkarte: RasterStyle = {
     maxZoom: 18,
 }
 
+// Add this with the other style definitions
+const swisstopoNational: RasterStyle = {
+    name: 'Swisstopo National',
+    type: 'raster',
+    url: [
+        'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg'
+    ],
+    attribution: osmAttribution + ', <a href="https://www.swisstopo.admin.ch/" target="_blank">swisstopo</a>',
+    maxZoom: 15,
+    tilePixelRatio: tilePixelRatio,
+}
+
+// Add this with the other style definitions
+const swisstopoLight: VectorStyle = {
+    name: 'Swisstopo Light',
+    type: 'vector',
+    url: 'https://vectortiles.geo.admin.ch/styles/ch.swisstopo.lightbasemap.vt/style.json',
+    attribution: osmAttribution + ', <a href="https://www.swisstopo.admin.ch/" target="_blank">swisstopo</a>',
+    maxZoom: 14
+}
+
+// Add OSM Liberty - free alternative to Kurviger Liberty
+const osmLiberty: VectorStyle = {
+    name: 'OSM Liberty',
+    type: 'vector',
+    url: 'http://10.0.0.203:8080/styles/OSM%20Liberty/style.json',
+    attribution: osmAttribution + ', <a href="https://github.com/maputnik/osm-liberty" target="_blank">OSM Liberty</a>',
+    maxZoom: 14
+}
+
 const styleOptions: StyleOption[] = [
-    omniscale,
+    // omniscale,
     osmOrg,
-    osmCycl,
-    esriSatellite,
-    mapTilerSatellite,
-    tfTransport,
-    tfCycle,
-    tfOutdoors,
-    kurviger,
-    mapillion,
-    lyrk,
-    wanderreitkarte,
+    // osmCycl,
+    // esriSatellite,
+    // mapTilerSatellite,
+    // tfTransport,
+    // tfCycle,
+    // tfOutdoors,
+    // kurviger,
+    // mapillion,
+    // lyrk,
+    // wanderreitkarte,
+    // swisstopoNational,
+    swisstopoLight,
+    osmLiberty
 ]
 
 export default class MapOptionsStore extends Store<MapOptionsStoreState> {
