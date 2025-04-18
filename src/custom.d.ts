@@ -15,6 +15,7 @@ declare module 'config' {
         thunderforest: string
         kurviger: string
     }
+    const openmaptilesURL: string
     const request: {
         details: string[]
         snapPreventions: string[]

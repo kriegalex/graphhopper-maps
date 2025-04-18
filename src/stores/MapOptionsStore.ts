@@ -13,6 +13,7 @@ const osApiKey = config.keys.omniscale
 const mapTilerKey = config.keys.maptiler
 const thunderforestApiKey = config.keys.thunderforest
 const kurvigerApiKey = config.keys.kurviger
+const openmaptilesURL = config.openmaptilesURL
 
 const osmAttribution =
     '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
@@ -202,11 +203,29 @@ const swisstopoLight: VectorStyle = {
 }
 
 // Add OSM Liberty - free alternative to Kurviger Liberty
+const osmLibertyRaster: RasterStyle = {
+    name: 'OSM Liberty',
+    type: 'raster',
+    url: [ openmaptilesURL + 'styles/osm-liberty/' + (isRetina ? '256' : '512') + '/{z}/{x}/{y}.png' ],
+    attribution: osmAttribution + ', <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>' + ', <a href="https://github.com/maputnik/osm-liberty" target="_blank">OSM Liberty</a>',
+    maxZoom: 19,
+}
+
+// Add OSM Liberty - free alternative to Kurviger Liberty
 const osmLiberty: VectorStyle = {
     name: 'OSM Liberty',
     type: 'vector',
-    url: 'http://10.0.0.203:8080/styles/OSM%20Liberty/style.json',
-    attribution: osmAttribution + ', <a href="https://github.com/maputnik/osm-liberty" target="_blank">OSM Liberty</a>',
+    url: openmaptilesURL + 'styles/osm-liberty/style.json',
+    attribution: osmAttribution + ', <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>' + ', <a href="https://github.com/maputnik/osm-liberty" target="_blank">OSM Liberty</a>',
+    maxZoom: 14
+}
+
+// Add OSM Liberty - free alternative to Kurviger Liberty
+const openmaptiles: VectorStyle = {
+    name: 'OSM OpenMapTiles',
+    type: 'vector',
+    url: openmaptilesURL + 'styles/openmaptiles/style.json',
+    attribution: osmAttribution + ', <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>',
     maxZoom: 14
 }
 
@@ -224,8 +243,10 @@ const styleOptions: StyleOption[] = [
     // lyrk,
     // wanderreitkarte,
     // swisstopoNational,
-    swisstopoLight,
-    osmLiberty
+    osmLibertyRaster,
+    // swisstopoLight,
+    // osmLiberty,
+    // openmaptiles
 ]
 
 export default class MapOptionsStore extends Store<MapOptionsStoreState> {
