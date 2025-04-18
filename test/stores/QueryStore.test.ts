@@ -49,6 +49,10 @@ class ApiMock implements Api {
         this.callback(args)
     }
 
+    routeWithSegmentDispatch(args: RoutingArgs): void {
+        this.callback(args)
+    }
+
     supportsGeocoding(): boolean {
         return false
     }
@@ -404,6 +408,7 @@ function getQueryPoint(id: number): QueryPoint {
         color: '',
         coordinate: { lat: 0, lng: 0 },
         id: id,
+        segmentProfile: '',
     }
 }
 

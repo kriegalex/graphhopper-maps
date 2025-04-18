@@ -3,6 +3,8 @@ import CarIcon from './car.svg'
 import FootIcon from './foot.svg'
 import HikeIcon from './hike.svg'
 import MotorcycleIcon from './motorcycle.svg'
+import HighwayIcon from './highway.svg'
+import TwistyIcon from './twisty.svg'
 import MtbBicycleIcon from './mtb-bicycle.svg'
 import RacingbikeIcon from './racingbike.svg'
 import ScooterIcon from './scooter.svg'
@@ -24,6 +26,8 @@ export const icons: Record<string, any> = {
     mtb: MtbBicycleIcon, // Mountainbike
     racingbike: RacingbikeIcon,
     motorcycle: MotorcycleIcon,
+    highway: HighwayIcon,
+    twisty: TwistyIcon,
     wheelchair: WheelchairIcon,
     question_mark: QuestionMarkIcon,
 }

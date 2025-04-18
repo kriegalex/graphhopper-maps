@@ -31,6 +31,8 @@ export default interface Api {
 
     routeWithDispatch(args: RoutingArgs, zoom: boolean): void
 
+    routeWithSegmentDispatch(args: RoutingArgs, zoomOnSuccess: boolean, batchId: number): void
+
     geocode(query: string, provider: string, additionalOptions?: Record<string, string>): Promise<GeocodingResult>
 
     reverseGeocode(query: POIQuery, bbox: Bbox): Promise<ReverseGeocodingHit[]>
@@ -59,6 +61,7 @@ export class ApiImpl implements Api {
     private readonly geocodingApi: string
     private routeCounter = 0
     private lastRouteNumber = -1
+    private lastBatchId = -1
 
     constructor(routingApi: string, geocodingApi: string, apiKey: string) {
         this.apiKey = apiKey
@@ -253,6 +256,31 @@ export class ApiImpl implements Api {
                 } else {
                     const tmp = JSON.stringify(args) + ' ' + routeNumber + ' <= ' + this.lastRouteNumber
                     console.log('Ignore error ' + error.message + ' of earlier started route ' + tmp)
+                }
+            })
+    }
+
+    routeWithSegmentDispatch(args: RoutingArgs, zoomOnSuccess: boolean, batchId: number) {
+        // Don't use the route counter or lastRouteNumber for segments
+        this.route(args)
+            .then(result => {
+                if(batchId >= this.lastBatchId) {
+                    this.lastBatchId = batchId
+                    // Always process segment results
+                    Dispatcher.dispatch(new RouteRequestSuccess(args, zoomOnSuccess, result))
+                } else {
+                    const tmp = JSON.stringify(args) + ' ' + batchId + ' <= ' + this.lastBatchId
+                    console.log('Ignore response of earlier started segmented route ' + tmp)
+                }
+            })
+            .catch(error => {
+                if(batchId >= this.lastBatchId) {
+                    console.warn('error when performing segmented /route request ' + batchId + ': ', error)
+                    this.lastBatchId = batchId
+                    Dispatcher.dispatch(new RouteRequestFailed(args, error.message))
+                } else {
+                    const tmp = JSON.stringify(args) + ' ' + batchId + ' <= ' + this.lastBatchId
+                    console.log('Ignore error ' + error.message + ' of earlier started segmented route ' + tmp)
                 }
             })
     }

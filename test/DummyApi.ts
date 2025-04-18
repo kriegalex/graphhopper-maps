@@ -41,6 +41,8 @@ export default class DummyApi implements Api {
 
     routeWithDispatch(args: RoutingArgs): void {}
 
+    routeWithSegmentDispatch(args: RoutingArgs): void {}
+
     supportsGeocoding(): boolean {
         return true
     }

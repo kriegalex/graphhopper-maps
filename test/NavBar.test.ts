@@ -121,6 +121,7 @@ describe('NavBar', function () {
                 isInitialized: false,
                 queryText: 'some1address-with!/<symb0ls',
                 color: '',
+                segmentProfile: '',
             }
             const profile = 'some-profile'
             const layer = 'Omniscale'
@@ -276,6 +277,7 @@ describe('NavBar', function () {
             isInitialized: false,
             queryText: '',
             color: '',
+            segmentProfile: '',
         }
         const profile = 'some-profile'
         const layer = 'Omniscale'

@@ -19,8 +19,35 @@
     grid-column: 2 / span 2;
 }
 
-.removeSearchBox {
+.profileBtn {
+    position: relative;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.profileOptions {
+    display: flex;
+    justify-content: space-around;
+    padding-left: 100px;
+    padding-right: 100px;
+    grid-column: 2 / span 2;
+}
+
+.profileSelectorWrapper {
     grid-column: 4;
+    height: 100%;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    transform: translateY(-50%);
+}
+
+.removeSearchBox {
+    grid-column: 5;
     width: 1rem;
     color: #adadad;
     justify-self: center;

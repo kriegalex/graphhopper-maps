@@ -263,3 +263,13 @@ export class SetPOIs implements Action {
         this.pois = pois
     }
 }
+
+export class UpdateSegmentProfile implements Action {
+    readonly index: number
+    readonly profile: string
+
+    constructor(index: number, profile: string) {
+        this.index = index
+        this.profile = profile
+    }
+}

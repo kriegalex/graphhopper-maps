@@ -70,6 +70,7 @@ function createEmptyQueryPoint(): QueryPoint {
         id: 0,
         color: '',
         type: QueryPointType.To,
+        segmentProfile: '',
     }
 }
 
@@ -91,6 +92,8 @@ class DummyApi implements Api {
     }
 
     routeWithDispatch(args: RoutingArgs): void {}
+
+    routeWithSegmentDispatch(args: RoutingArgs): void {}
 
     supportsGeocoding(): boolean {
         return false

@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Dispatcher from '@/stores/Dispatcher'
 import styles from '@/sidebar/search/Search.module.css'
 import { Coordinate, getBBoxFromCoord, QueryPoint } from '@/stores/QueryStore'
-import { AddPoint, ClearRoute, InvalidatePoint, MovePoint, RemovePoint, SetBBox, SetPoint } from '@/actions/Actions'
+import { AddPoint, ClearRoute, InvalidatePoint, MovePoint, RemovePoint, SetBBox, SetPoint, UpdateSegmentProfile } from '@/actions/Actions'
 import RemoveIcon from './minus-circle-solid.svg'
 import AddIcon from './plus-circle-solid.svg'
 import TargetIcon from './send.svg'
@@ -13,8 +13,9 @@ import AddressInput from '@/sidebar/search/AddressInput'
 import { MarkerComponent } from '@/map/Marker'
 import { tr } from '@/translation/Translation'
 import SettingsBox from '@/sidebar/SettingsBox'
+import { icons } from '@/sidebar/search/routingProfiles/profileIcons'
 
-export default function Search({ points, map }: { points: QueryPoint[]; map: Map }) {
+export default function Search({ points, map, routingProfile }: { points: QueryPoint[]; map: Map; routingProfile: string }) {
     const [showSettings, setShowSettings] = useState(false)
     const [showTargetIcons, setShowTargetIcons] = useState(true)
     const [moveStartIndex, onMoveStartSelect] = useState(-1)
@@ -28,6 +29,7 @@ export default function Search({ points, map }: { points: QueryPoint[]; map: Map
                         key={point.id}
                         index={index}
                         points={points}
+                        routingProfile={routingProfile}
                         deletable={points.length > 2}
                         onChange={() => {
                             Dispatcher.dispatch(new ClearRoute())
@@ -78,6 +80,7 @@ const SearchBox = ({
     dropPreviewIndex,
     onDropPreviewSelect,
     map,
+    routingProfile
 }: {
     index: number
     points: QueryPoint[]
@@ -88,9 +91,22 @@ const SearchBox = ({
     onMoveStartSelect: (index: number, showTargetIcon: boolean) => void
     dropPreviewIndex: number
     onDropPreviewSelect: (index: number) => void
-    map: Map
+    map: Map,
+    routingProfile: string
 }) => {
     const point = points[index]
+    const [showProfileOptions, setShowProfileOptions] = useState(false)
+    const [showCurrentProfile, setShowCurrentProfile] = useState(true)
+    const isMotorcycleProfile = routingProfile.startsWith('motorcycle')
+
+    const availableProfiles = isMotorcycleProfile ? ['twisty', 'highway'] : []
+    const selectedProfile = point.segmentProfile || 'twisty'
+
+    function handleProfileChange(profile: string) {
+        Dispatcher.dispatch(new UpdateSegmentProfile(index, profile))
+        setShowProfileOptions(false)
+        setShowCurrentProfile(true)
+    }
 
     function onClickOrDrop() {
         onDropPreviewSelect(-1)
@@ -104,6 +120,19 @@ const SearchBox = ({
 
     return (
         <>
+            {index > 0 && isMotorcycleProfile && showProfileOptions && (
+                <div className={styles.profileOptions}>
+                    {availableProfiles.map(profile => (
+                        <PlainButton 
+                            key={profile}
+                            className={styles.profileBtn}
+                            onClick={() => handleProfileChange(profile)}
+                        >
+                            {React.createElement(icons[profile] || icons.question_mark)}
+                        </PlainButton>
+                    ))}
+                </div>
+            )}
             {(moveStartIndex < 0 || moveStartIndex == index) && (
                 <div
                     title={tr('drag_to_reorder')}
@@ -188,6 +217,22 @@ const SearchBox = ({
                     onChange={onChange}
                 />
             </div>
+
+            {/* Only show profile selector for motorcycle profiles and non-first waypoints */}
+            {index > 0 && isMotorcycleProfile && (
+                <div className={styles.profileSelectorWrapper}>
+                    <PlainButton 
+                        title={tr(selectedProfile)}
+                        onClick={() => {
+                            setShowProfileOptions(!showProfileOptions)
+                            setShowCurrentProfile(!showCurrentProfile)
+                        }}
+                        className={styles.profileBtn}
+                    >
+                        {showCurrentProfile && (React.createElement(icons[selectedProfile]))}
+                    </PlainButton>
+                </div>
+            )}
             {deletable && (
                 <PlainButton
                     title={tr('delete_from_route')}

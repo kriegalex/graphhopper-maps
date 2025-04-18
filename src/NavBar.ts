@@ -59,6 +59,7 @@ export default class NavBar {
                 queryText: parameter,
                 color: '',
                 type: QueryPointType.Via,
+                segmentProfile: '',
             }
             if (split.length >= 1)
                 try {
